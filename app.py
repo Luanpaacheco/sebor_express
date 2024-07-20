@@ -37,7 +37,9 @@ def exibir_opcoes():
 def cadastrar_nome_restaurantes(texto):
     exibir_subtitulo(texto)
     nome_do_restaurante = input("Digite o nome do restaurante que deseja cadastrar: ")
-    restaurantes.append(nome_do_restaurante)
+    categoria=input("Digite a categoria do restaurante:")
+    dados_restaurante= {"nome":nome_do_restaurante,"categoria":categoria,"ativo":False}
+    restaurantes.append(dados_restaurante)
     print(f"o restaurante {nome_do_restaurante} foi cadastrada\n")
     voltar_menu_pricipal()
      
@@ -50,7 +52,8 @@ def listar_restaurantes(texto):
     for restaurante in restaurantes:
         nome_restaurante=restaurante["nome"]
         categoria_restaurante=restaurante["categoria"]
-        print(f"-{nome_restaurante} | {categoria_restaurante}") 
+        ativacao_restaurante="ativado" if restaurante["ativo"] else "desativado"
+        print(f"-{nome_restaurante} | {categoria_restaurante} | {ativacao_restaurante}") 
     voltar_menu_pricipal()
     
 
@@ -69,18 +72,35 @@ def escolher_opcao():
 █░░ █ █▀ ▀█▀ ▄▀█   █▀▄ █▀▀   █▀█ █▀▀ █▀ ▀█▀ ▄▀█ █░█ █▀█ ▄▀█ █▄░█ ▀█▀ █▀▀ █▀
 █▄▄ █ ▄█ ░█░ █▀█   █▄▀ ██▄   █▀▄ ██▄ ▄█ ░█░ █▀█ █▄█ █▀▄ █▀█ █░▀█ ░█░ ██▄ ▄█""")
             case 3:
-                exibir_subtitulo("""
+                alternar_estado_restaurante("""
 ▄▀█ ▀█▀ █ █░█ ▄▀█ █▀▀ ▄▀█ █▀█   █▀▄ █▀▀   █▀█ █▀▀ █▀ ▀█▀ ▄▀█ █░█ █▀█ ▄▀█ █▄░█ ▀█▀ █▀▀ █▀
 █▀█ ░█░ █ ▀▄▀ █▀█ █▄▄ █▀█ █▄█   █▄▀ ██▄   █▀▄ ██▄ ▄█ ░█░ █▀█ █▄█ █▀▄ █▀█ █░▀█ ░█░ ██▄ ▄█""")
             case 4:
-                print('Finalizar app')
+                alternar_estado_restaurante()
             case _:
                 opcao_invalida()
     except:
         opcao_invalida()    
     
     
+def alternar_estado_restaurante(texto):
+    exibir_subtitulo(texto)
+    nome_restaurante=input("digite o nome do restaurante que deseja alternar o estado: ")
+    restaurante_encontrado=False
     
+    for restaurante in restaurantes:
+        if nome_restaurante==restaurante["nome"]:
+            restaurante_encontrado=True
+            restaurante["ativo"]=not restaurante["ativo"]
+            mensagem=f"O restaurante {nome_restaurante} foi ativado com sucesso" if restaurante["ativo"] else f"O restaurante {nome_restaurante} foi desativado com sucesso"
+            
+    if not restaurante_encontrado:
+        print("RESTAURANTE NÃO ENCONTRADO")
+    else:
+        print(mensagem)
+        
+    voltar_menu_pricipal()  
+   
     
 def main():
     os.system("cls")
